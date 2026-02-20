@@ -11,6 +11,7 @@ const startServer = async () => {
     try {
         broker = getMessageBroker();
         await broker.connectConsumer();
+        // await broker.consumeMessages([Topics.ORDER,Topics.PRODUCT,Topics.TOPPING], true);
         await broker.consumeMessages([Topics.ORDER], true);
 
         ws.wsServer

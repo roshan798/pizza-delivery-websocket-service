@@ -3,11 +3,14 @@ import { MessageBroker } from '../common/MessageBroker';
 import { Topics } from './eventUtils';
 import { Logger } from 'winston';
 import { getLogger } from '../common/factory';
+import { MessageHandler } from './messageHandler';
 
 export class KafkaMessageBroker implements MessageBroker {
 	private consumer: Consumer;
 	private kafka: Kafka;
 	private logger: Logger;
+	private messageHandler: MessageHandler;
+
 	constructor(clientId: string, brokers: string[]) {
 		this.kafka = new Kafka({
 			clientId: clientId,
@@ -15,6 +18,7 @@ export class KafkaMessageBroker implements MessageBroker {
 		});
 		this.consumer = this.kafka.consumer({ groupId: `${clientId}-group` });
 		this.logger = getLogger();
+		this.messageHandler = new MessageHandler();
 	}
 
 	async connectConsumer(): Promise<void> {
@@ -36,28 +40,28 @@ export class KafkaMessageBroker implements MessageBroker {
 				switch (topic) {
 					case Topics.PRODUCT.toString():
 						this.logger.info(message.value?.toString());
-						// await consumeProductMessageHandler(
-						// 	topic,
-						// 	partition,
-						// 	message.value?.toString()
-						// );
+						await this.messageHandler.consumeProductMessage(
+							topic,
+							partition,
+							message.value?.toString() || ''
+						);
 						break;
 					case Topics.TOPPING.toString():
 						this.logger.info(message.value?.toString());
 
-						// await consumeToppingMessageHandler(
-						// 	topic,
-						// 	partition,
-						// 	message.value?.toString()
-						// );
+						await this.messageHandler.consumeToppingMessage(
+							topic,
+							partition,
+							message.value?.toString() || ""
+						);
 						break;
 					case Topics.ORDER.toString():
 						this.logger.info(message.value?.toString());
-						// await consumeOrderMessageHandler(
-						// 	topic,
-						// 	partition,
-						// 	message.value?.toString()
-						// )
+						await this.messageHandler.consumeOrderMessage(
+							topic,
+							partition,
+							message.value?.toString() || ""
+						)
 						break;
 					default:
 						this.logger.warn(`No handler for topic: ${topic}`);

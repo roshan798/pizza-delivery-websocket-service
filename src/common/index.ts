@@ -8,7 +8,7 @@ export const Config = {
     NODE_ENV: config.get<string>('NODE_ENV'),
     CLIENT_URLS: config.get<string>('client.urls').split(','),
     AUTH_JWKS_URI: config.get<string>('auth.jwksUri'),
-    BROKERS: config.get<string>('kafka.brokers').split(','),
+    BROKERS: config.get<string[]>('kafka.brokers'),
     LOG: {
         Level: config.get<string>('log.level'),
         Application_Log_Filename: config.get<string>('log.application_log_filename'),

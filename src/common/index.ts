@@ -9,6 +9,8 @@ export const Config = {
     CLIENT_URLS: config.get<string>('client.urls').split(','),
     AUTH_JWKS_URI: config.get<string>('auth.jwksUri'),
     BROKERS: config.get<string[]>('kafka.brokers'),
+    KAFKA_USERNAME: config.get<string>('kafka.username'),
+    KAFKA_PASSWORD: config.get<string>('kafka.password'),
     LOG: {
         Level: config.get<string>('log.level'),
         Application_Log_Filename: config.get<string>('log.application_log_filename'),
